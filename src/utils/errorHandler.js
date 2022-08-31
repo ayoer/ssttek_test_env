@@ -1,5 +1,5 @@
-import errors, {errorPriorities} from 'enums/errors';
-import {createError} from 'controllers/error';
+import errors, {errorPriorities} from 'helpers/errors';
+
 const ErrorResponse = require('helpers/errorResponse');
 let lastErrorString = '';
 let lastErrorMillis = 0;
@@ -19,11 +19,11 @@ const errorHandler = (err, req, res, next) => {
   // console.log('err stack', err.stack);
   // console.log('req.user', req?.user);
 
-  if (lastErrorString !== errString || Date.now() - lastErrorMillis > 5000) {
-    createError(errObj, req?.user);
-    lastErrorString = errString;
-    lastErrorMillis = Date.now();
-  }
+  // if (lastErrorString !== errString || Date.now() - lastErrorMillis > 5000) {
+  //   createError(errObj, req?.user);
+  //   lastErrorString = errString;
+  //   lastErrorMillis = Date.now();
+  // }
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
@@ -39,9 +39,9 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     error = new ErrorResponse(errors.VALIDATION_ERROR, err.message);
   }
-  console.log('ERROR HANDLER');
-
-  console.log(error);
+  // console.log('ERROR HANDLER');
+  // console.log(error);
+  // console.log('res', res);
 
   if (res) {
     res.status(error.statusCode || 500).json({

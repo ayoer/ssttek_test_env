@@ -1,4 +1,5 @@
 // const { PORT, NODE_ENV } = process.env
+const errorHandler = require('utils/errorHandler');
 
 module.exports = async (app) => {
   // app.listen(PORT, () =>

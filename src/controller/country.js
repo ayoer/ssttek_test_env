@@ -2373,7 +2373,7 @@ export const getCountry = async (req, res, next) => {
 };
 
 export const searchCountry = async (req, res) => {
-  const filter = req.body.filter || {};
+  const filter = req.body.filter || {fields: [{condition: 'equal', value: true, dataField: 'euMember'}]};
 
   res.send(await search(null, Country, searchTextFields, filter, defaultProjection, adminFields));
 };

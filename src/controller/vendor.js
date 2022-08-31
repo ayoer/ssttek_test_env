@@ -51,7 +51,7 @@ export const updateVendor = async (req, res) => {
   res.send(await getFullVendor(vendor._id));
 };
 export const deleteVendor = async (req, res) => {
-  const {id} = req.body;
+  const {id} = req.params;
   if (!id) throw new ErrorResponse(errors.INVALID_OR_MISSING_PROPERTY, 'id not found');
 
   const vendor = await Vendor.findById(id);
@@ -63,7 +63,14 @@ export const deleteVendor = async (req, res) => {
   res.send('OK');
 };
 export const searchVendor = async (req, res) => {
-  const filter = req.body.filter || {};
+  const filter = req.body.filter || {
+    filter: {
+      page: {
+        size: 500,
+        number: 0,
+      },
+    },
+  };
 
   res.send(await search(null, Vendor, searchTextFields, filter, defaultProjection, adminFields, lookupInfo));
 };

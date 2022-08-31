@@ -1,3 +1,3 @@
 module.exports = async (app) => {
-  app.use(require('cors')())
-}
+  app.use(require('cors')());
+};

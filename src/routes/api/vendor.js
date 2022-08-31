@@ -5,7 +5,7 @@ import {getVendor, searchVendor, createVendor, updateVendor, deleteVendor} from 
 const router = express.Router();
 
 router.route('/search').post(searchVendor);
-router.route('/:id').get(getVendor);
-router.route('/').post(createVendor).put(updateVendor).delete(deleteVendor);
+router.route('/:id').get(getVendor).delete(deleteVendor);
+router.route('/').post(createVendor).put(updateVendor);
 
 export default router;
