@@ -1,6 +1,6 @@
 module.exports.initModules = ['environment', 'database', 'listen'];
-module.exports.middlewareModules = ['express', 'routes'];
+module.exports.middlewareModules = ['express', 'routes', 'cors'];
 
-module.exports.apiRoutes = ['book', 'author'];
+module.exports.apiRoutes = ['vendor', 'country'];
 
 module.exports.env = process.env;
