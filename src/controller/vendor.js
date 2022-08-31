@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import ErrorResponse from 'helpers/errorResponse';
 import errors from 'helpers/errors';
 import {search} from 'helpers/filterParser';
@@ -6,13 +7,22 @@ import Vendor from 'model/Vendor';
 const searchTextFields = ['name', 'displayName', 'country', 'address', 'phone'];
 const adminFields = [];
 const defaultProjection = ['name', 'displayName', 'countryId', 'country', 'address', 'phone'];
+const lookupInfo = [
+  {
+    from: 'countries',
+    localField: 'countryId',
+    foreignField: '_id',
+    as: 'country',
+    isSingle: true,
+  },
+];
 
 export const getVendor = async (req, res) => {
   const {id} = req.params;
 
   if (!id) throw new ErrorResponse(errors.INVALID_OR_MISSING_PROPERTY, 'id not found');
 
-  const vendor = await Vendor.findById(id);
+  const vendor = await getFullVendor(id);
 
   res.send(vendor);
 };
@@ -28,7 +38,7 @@ export const createVendor = async (req, res) => {
 
   const vendor = await Vendor.create(req.body);
 
-  res.send(vendor);
+  res.send(await getFullVendor(vendor._id));
 };
 
 export const updateVendor = async (req, res) => {
@@ -38,7 +48,7 @@ export const updateVendor = async (req, res) => {
 
   const vendor = await Vendor.findByIdAndUpdate(id, req.body, {new: true});
 
-  res.send(vendor);
+  res.send(await getFullVendor(vendor._id));
 };
 export const deleteVendor = async (req, res) => {
   const {id} = req.body;
@@ -55,5 +65,29 @@ export const deleteVendor = async (req, res) => {
 export const searchVendor = async (req, res) => {
   const filter = req.body.filter || {};
 
-  res.send(await search(null, Vendor, searchTextFields, filter, defaultProjection, adminFields));
+  res.send(await search(null, Vendor, searchTextFields, filter, defaultProjection, adminFields, lookupInfo));
+};
+
+const getFullVendor = async (_id) => {
+  const vendors = await Vendor.aggregate([
+    {$match: {_id: {$eq: mongoose.Types.ObjectId(_id)}}},
+    {
+      $lookup: {
+        from: 'countries',
+        localField: 'countryId',
+        foreignField: '_id',
+        as: 'country',
+      },
+    },
+    {
+      $unwind: {
+        path: '$country',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+  ]).exec();
+
+  if (!vendors[0]) throw new ErrorResponse(errors.RECORD_NOT_FOUND);
+
+  return vendors[0];
 };

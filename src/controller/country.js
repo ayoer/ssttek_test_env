@@ -1,4 +1,4 @@
-import Country from 'models/Country';
+import Country from 'model/Country';
 import {search} from 'helpers/filterParser';
 import ErrorResponse from 'helpers/errorResponse';
 import errors from 'helpers/errors';
@@ -2375,43 +2375,22 @@ export const getCountry = async (req, res, next) => {
 export const searchCountry = async (req, res) => {
   const filter = req.body.filter || {};
 
-  res.send(await search(req.user, Country, searchTextFields, filter, defaultProjection, adminFields));
+  res.send(await search(null, Country, searchTextFields, filter, defaultProjection, adminFields));
 };
 
 export const initCountry = async (req, res) => {
-  // await Rack.findOneAndUpdate(
-  //   {_id: '60ed815898af2cbb1a5a6c25'},
-  //   {
-  //     $push: {
-  //       stocks: {name: 'WhiteToBlack', blendedBarcode: 'BBINCYIT30G5G', freeQuantity: 1, reservedQuantity: 0, blendedReturnBarcode: 'RINCWEYUT'},
-  //     },
-  //     $inc: {quantity: 1},
-  //   },
-  //   {new: true}
-  // );
-  // await Rack.findOneAndUpdate(
-  //   {_id: '60ed815898af2cbb1a5a6c25'},
-  //   {
-  //     $push: {
-  //       stocks: {name: 'WhiteToBlack', blendedBarcode: 'BBINCYIT30G5G', freeQuantity: 1, reservedQuantity: 0, blendedReturnBarcode: 'RINC3DAX3'},
-  //     },
-  //     $inc: {quantity: 1},
-  //   },
-  //   {new: true}
-  // );
-  //return 'OK';
-  let x = 0;
-  for (x = 0; x < data.length; x++) {
-    const newCountry = new Country({
-      name: data[x].name,
-      code2: data[x].code2,
-      code3: data[x].code3,
-      numericCode: data[x].numericCode,
-      turkishName: data[x]?.turkishName || '',
-      euMember: data[x]?.euMember || false,
-    });
-    let result = await newCountry.save();
-    console.log('result', result);
-  }
+  // let x = 0;
+  // for (x = 0; x < data.length; x++) {
+  //   const newCountry = new Country({
+  //     name: data[x].name,
+  //     code2: data[x].code2,
+  //     code3: data[x].code3,
+  //     numericCode: data[x].numericCode,
+  //     turkishName: data[x]?.turkishName || '',
+  //     euMember: data[x]?.euMember || false,
+  //   });
+  //   let result = await newCountry.save();
+  //   console.log('result', result);
+  // }
   res.send('OK');
 };

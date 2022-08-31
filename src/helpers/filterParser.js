@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import {userRole} from 'enums/user';
-import {sum} from 'lodash';
 const {ObjectId} = mongoose.Types;
 
 const exampleFilter1 = {
